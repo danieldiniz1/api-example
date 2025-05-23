@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "tb_contact")
 public class ContactModel {
 
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String phone;

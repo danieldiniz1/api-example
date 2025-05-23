@@ -6,9 +6,9 @@ import jakarta.persistence.*;
 @Table(name = "tb_address")
 public class AddressModel {
 
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private long id;
 
     private String street;
 
@@ -21,4 +21,5 @@ public class AddressModel {
     private String country;
 
     private String zipCode;
+
 }

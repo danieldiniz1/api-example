@@ -7,12 +7,14 @@ import jakarta.validation.constraints.Email;
 @Table(name = "tb_user")
 public class UserModel {
 
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false, length = 80)
     private String firstName;
 
+    @Column(nullable = false, length = 100)
     private String lastName;
 
     @Column(unique = true, nullable = false)
@@ -27,7 +29,7 @@ public class UserModel {
     private AddressModel address;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contact_id")
+    @JoinColumn(name = "contact_id", referencedColumnName = "id")
     private ContactModel contact;
 
 
