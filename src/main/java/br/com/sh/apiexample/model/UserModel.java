@@ -1,11 +1,9 @@
 package br.com.sh.apiexample.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import lombok.Data;
 
-@Entity()
+@Entity
 @Table(name = "tb_user")
 public class UserModel {
 
@@ -31,8 +29,6 @@ public class UserModel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id")
     private ContactModel contact;
-
-
 
 
 }

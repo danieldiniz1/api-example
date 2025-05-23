@@ -2,7 +2,7 @@ package br.com.sh.apiexample.model;
 
 import jakarta.persistence.*;
 
-@Entity()
+@Entity
 @Table(name = "tb_address")
 public class AddressModel {
 
