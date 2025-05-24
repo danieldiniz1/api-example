@@ -1,4 +1,4 @@
-package br.com.sh.apiexample.controller;
+package br.com.sh.apiexample.controller.v1;
 
 import br.com.sh.apiexample.facade.UserFacade;
 import br.com.sh.apiexample.model.dto.UserDto;
