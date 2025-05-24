@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -36,7 +35,6 @@ class DefaultUserServiceTest {
 
     @BeforeEach
     void setUp() {
-//        MockitoAnnotations.openMocks(this);
         cpf = "12345678900";
         email = "teste@email.com";
         firstName = "John";
@@ -50,8 +48,6 @@ class DefaultUserServiceTest {
                 .build();
 
         userDto = new UserDto(firstName, lastName, email);
-//        when(userRepository.save(any(UserModel.class))).thenReturn(userModel);
-//        when(userRepository.findByCpfAndActive(cpf, true)).thenReturn(Optional.of(new UserDto(firstName, lastName, email)));
     }
 
     @Test
@@ -95,7 +91,7 @@ class DefaultUserServiceTest {
 
     @Test
     void testUpdateUser() {
-       doNothing().when(userRepository).updateUser(email, cpf);
+        doNothing().when(userRepository).updateUser(email, cpf);
 
         defaultUserService.updateUser(email, cpf);
 
