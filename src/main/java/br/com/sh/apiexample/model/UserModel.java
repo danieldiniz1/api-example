@@ -5,8 +5,12 @@ import jakarta.validation.constraints.Email;
 
 
 @Entity
-@Table(name = "tb_user")
-
+@Table(name = "tb_user", indexes = {
+        @Index(name = "idx_first_name", columnList = "firstName"),
+        @Index(name = "idx_name", columnList = "lastName, firstName"),
+        @Index(name = "idx_cpf", columnList = "cpf", unique = true)
+})
+//TODO criar indexes para este e para addressModel
 public class UserModel {
 
     @Id
@@ -14,19 +18,21 @@ public class UserModel {
     private long id;
 
     @Column(nullable = false, length = 80)
+
     private String firstName;
 
     @Column(nullable = false, length = 100)
     private String lastName;
 
     @Column(unique = true, nullable = false)
+
     private String cpf;
 
     @Column(unique = true, nullable = false)
     @Email
     private String email;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private AddressModel address;
 

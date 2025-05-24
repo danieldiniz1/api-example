@@ -4,7 +4,16 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "tb_address")
+@Table(name = "tb_address", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"street", "number", "city", "state", "country","zipCode"})
+},
+        indexes = {
+                @Index(name = "idx_general", columnList = "street, city, state"),
+                @Index(name = "idx_street", columnList = "street"),
+                @Index(name = "idx_city", columnList = "city"),
+                @Index(name = "idx_state", columnList = "state"),
+                @Index(name = "idx_zipCode", columnList = "zipCode")
+        })
 @Data
 public class AddressModel {
 
