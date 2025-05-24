@@ -1,5 +1,6 @@
 package br.com.sh.apiexample.facade.impl;
 
+import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.facade.UserFacade;
 import br.com.sh.apiexample.model.AddressModel;
 import br.com.sh.apiexample.model.ContactModel;
@@ -43,6 +44,21 @@ public class DefaultUserFacade implements UserFacade {
         logger.info("User contact: {}", user.getContact());
         userService.save(user);
         return userRevertDtoPopulator.populate(user);
+    }
+
+    @Override
+    public UserDto getUser(String cpf) {
+        return userService.findBycpf(cpf);
+    }
+
+    @Override
+    public void updateUser(String email, String cpf) {
+        userService.updateUser(email,cpf);
+    }
+
+    @Override
+    public void deleteUser(String cpf) {
+        userService.deleteUser(cpf);
     }
 
     private UserModel convertUserFormToModel(UserForm form) {

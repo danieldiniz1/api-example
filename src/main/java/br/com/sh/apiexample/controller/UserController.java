@@ -8,10 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -31,4 +28,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
+    @GetMapping(path = "/{cpf}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDto> getUser(@PathVariable String cpf) {
+        logger.info("Fetching user with cpf: {}", cpf);
+        UserDto userDto = userFacade.getUser(cpf);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+    }
+
+    @PatchMapping
+    public ResponseEntity<UserDto> update(@RequestParam String email, @RequestParam String cpf) {
+        logger.info("Updating user with email: {}", email);
+        userFacade.updateUser(email, cpf);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<Void> delete(@RequestParam String cpf) {
+        logger.info("Deleting user with email: {}", cpf);
+        userFacade.deleteUser(cpf);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

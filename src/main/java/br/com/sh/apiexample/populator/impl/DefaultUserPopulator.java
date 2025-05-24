@@ -25,6 +25,7 @@ public class DefaultUserPopulator implements Populator<UserForm, UserModel> {
                 .lastName(source.lastName())
                 .email(source.email())
                 .cpf(source.cpf())
+                .active(true)
                 .build();
     }
 

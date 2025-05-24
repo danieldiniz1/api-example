@@ -33,6 +33,7 @@ public class UserModel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id", referencedColumnName = "id")
     private ContactModel contact;
+    private boolean active;
 
     public static class Builder {
         private String firstName;
@@ -41,6 +42,7 @@ public class UserModel {
         private String email;
         private AddressModel address;
         private ContactModel contact;
+        private boolean active;
 
         public Builder firstName(String firstName) {
             this.firstName = firstName;
@@ -71,6 +73,10 @@ public class UserModel {
             this.contact = contact;
             return this;
         }
+        public Builder active(boolean active) {
+            this.active = active;
+            return this;
+        }
 
         public UserModel build() {
             UserModel userModel = new UserModel();
@@ -80,6 +86,7 @@ public class UserModel {
             userModel.email = this.email;
             userModel.address = this.address;
             userModel.contact = this.contact;
+            userModel.active = this.active;
 
             return userModel;
         }
@@ -133,4 +140,9 @@ public class UserModel {
     public void setContact(ContactModel contact) {
         this.contact = contact;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
 }

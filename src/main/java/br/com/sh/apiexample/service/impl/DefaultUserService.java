@@ -1,5 +1,6 @@
 package br.com.sh.apiexample.service.impl;
 
+import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.repository.UserRepository;
@@ -9,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class DefaultUserService implements UserService {
@@ -24,5 +27,22 @@ public class DefaultUserService implements UserService {
     @Transactional
     public UserModel save(UserModel user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserDto findBycpf(String cpf) {
+        return userRepository
+                .findByCpfAndActive(cpf, true)
+                .orElseThrow(() -> new CustomEntityNotFoundException("User not found with cpf: " + cpf));
+    }
+
+    @Override
+    public void updateUser(String email, String cpf) {
+        userRepository.updateUser(email,cpf);
+    }
+
+    @Override
+    public void deleteUser(String cpf) {
+        userRepository.logicDeleteByCpf(cpf);
     }
 }
