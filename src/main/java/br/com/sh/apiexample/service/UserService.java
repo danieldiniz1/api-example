@@ -3,7 +3,7 @@ package br.com.sh.apiexample.service;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface UserService {
 
@@ -14,4 +14,6 @@ public interface UserService {
     void updateUser(String email,String cpf);
 
     void deleteUser(String cpf);
+
+    List<UserDto> findallUsers();
 }

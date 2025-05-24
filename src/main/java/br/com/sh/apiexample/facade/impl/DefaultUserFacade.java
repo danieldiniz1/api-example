@@ -15,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DefaultUserFacade implements UserFacade {
 
@@ -59,6 +61,11 @@ public class DefaultUserFacade implements UserFacade {
     @Override
     public void deleteUser(String cpf) {
         userService.deleteUser(cpf);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return userService.findallUsers();
     }
 
     private UserModel convertUserFormToModel(UserForm form) {

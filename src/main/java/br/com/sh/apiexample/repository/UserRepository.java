@@ -8,10 +8,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
+
+    @Query(value = "SELECT u.first_name, u.last_name, u.email FROM tb_user u WHERE u.active = true",
+            nativeQuery = true)
+    List<UserDto> findall();
 
     Optional<UserDto> findByCpfAndActive(String cpf, boolean active);
 

@@ -3,18 +3,21 @@ package br.com.sh.apiexample.controller;
 import br.com.sh.apiexample.facade.UserFacade;
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.UserForm;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
 
-    private static final Logger logger = LogManager.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserFacade userFacade;
 
     public UserController(UserFacade userFacade) {
@@ -36,6 +39,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        logger.debug("teste logg debug :{} ","string de teste");
+        logger.error("teste logg error");
+        logger.info("teste logg info");
+        logger.warn("teste logg warn");
+        logger.info("Fetching all users");
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userFacade.getAllUsers());
+    }
+
     @PatchMapping
     public ResponseEntity<UserDto> update(@RequestParam String email, @RequestParam String cpf) {
         logger.info("Updating user with email: {}", email);
@@ -49,4 +64,5 @@ public class UserController {
         userFacade.deleteUser(cpf);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }
