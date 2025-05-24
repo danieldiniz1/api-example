@@ -41,14 +41,8 @@ public class UserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        logger.debug("teste logg debug :{} ","string de teste");
-        logger.error("teste logg error");
-        logger.info("teste logg info");
-        logger.warn("teste logg warn");
-        logger.info("Fetching all users");
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(userFacade.getAllUsers());
+        logger.debug("Fetching all users");
+        return ResponseEntity.status(HttpStatus.OK).body(userFacade.getAllUsers());
     }
 
     @PatchMapping
