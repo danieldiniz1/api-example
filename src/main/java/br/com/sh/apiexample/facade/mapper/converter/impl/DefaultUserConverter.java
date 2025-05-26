@@ -10,6 +10,7 @@ import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.AddressForm;
 import br.com.sh.apiexample.model.form.ContactForm;
 import br.com.sh.apiexample.model.form.UserForm;
+import br.com.sh.apiexample.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,16 +22,19 @@ public class DefaultUserConverter implements UserConverter {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultUserFacade.class);
 
+    private final AddressService addressService;
+
     private final Populator<UserForm,UserModel> userModelPopulator;
     private final Populator<AddressForm, AddressModel> addressModelPopulator;
     private final Populator<ContactForm, ContactModel> contactModelPopulator;
 
     private final Populator<UserModel, UserDto> userRevertDtoPopulator;
 
-    public DefaultUserConverter(Populator<UserForm, UserModel> userModelPopulator,
+    public DefaultUserConverter(AddressService addressService, Populator<UserForm, UserModel> userModelPopulator,
                                 Populator<AddressForm, AddressModel> addressModelPopulator,
                                 Populator<ContactForm, ContactModel> contactModelPopulator,
                                 Populator<UserModel, UserDto> userRevertDtoPopulator) {
+        this.addressService = addressService;
         this.userModelPopulator = userModelPopulator;
         this.addressModelPopulator = addressModelPopulator;
         this.contactModelPopulator = contactModelPopulator;
@@ -44,7 +48,22 @@ public class DefaultUserConverter implements UserConverter {
         Objects.requireNonNull(userForm.address());
         Objects.requireNonNull(userForm.contact());
         UserModel userModel = userModelPopulator.populate(userForm);
-        userModel.setAddress(addressModelPopulator.populate(userForm.address()));
+
+
+        addressService.findByKeys(userForm.address())
+                .ifPresentOrElse(
+                        addressModel -> {
+                            logger.info("Address found for user: {}", userModel.getEmail());
+                            userModel.setAddress(addressModel);
+                        },
+                        () -> {
+                            logger.warn("Address not found for user: {}", userModel.getEmail());
+                            userModel.setAddress(addressModelPopulator.populate(userForm.address()));
+                        }
+                );
+
+
+//        userModel.setAddress(addressModelPopulator.populate(userForm.address()));
         userModel.setContact(contactModelPopulator.populate(userForm.contact()));
         return userModel;
     }
