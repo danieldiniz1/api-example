@@ -1,8 +1,8 @@
-package br.com.sh.apiexample.populator.impl.revert;
+package br.com.sh.apiexample.facade.mapper.populator.impl.revert;
 
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
-import br.com.sh.apiexample.populator.Populator;
+import br.com.sh.apiexample.facade.mapper.populator.Populator;
 import org.springframework.stereotype.Component;
 
 @Component

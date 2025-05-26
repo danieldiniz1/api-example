@@ -1,8 +1,8 @@
-package br.com.sh.apiexample.populator.impl;
+package br.com.sh.apiexample.facade.mapper.populator.impl;
 
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.form.UserForm;
-import br.com.sh.apiexample.populator.Populator;
+import br.com.sh.apiexample.facade.mapper.populator.Populator;
 import org.springframework.stereotype.Component;
 
 @Component

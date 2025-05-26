@@ -49,7 +49,7 @@ public class UserController {
     public ResponseEntity<UserDto> update(@RequestParam String email, @RequestParam String cpf) {
         logger.info("Updating user with email: {}", email);
         userFacade.updateUser(email, cpf);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping()

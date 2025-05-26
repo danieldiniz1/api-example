@@ -1,4 +1,4 @@
-package br.com.sh.apiexample.populator;
+package br.com.sh.apiexample.facade.mapper.populator;
 
 public interface Populator<SOURCE, TARGET> {
 
