@@ -48,8 +48,6 @@ public class DefaultUserConverter implements UserConverter {
         Objects.requireNonNull(userForm.address());
         Objects.requireNonNull(userForm.contact());
         UserModel userModel = userModelPopulator.populate(userForm);
-
-
         addressService.findByKeys(userForm.address())
                 .ifPresentOrElse(
                         addressModel -> {
@@ -61,9 +59,6 @@ public class DefaultUserConverter implements UserConverter {
                             userModel.setAddress(addressModelPopulator.populate(userForm.address()));
                         }
                 );
-
-
-//        userModel.setAddress(addressModelPopulator.populate(userForm.address()));
         userModel.setContact(contactModelPopulator.populate(userForm.contact()));
         return userModel;
     }
