@@ -11,10 +11,13 @@ public class ContactModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(length = 50)
     private String phone;
 
+    @Column(length = 50)
     private String mobile;
 
+    @Column(name = "email_secundary",length = 100)
     private String emailSecundary;
 
     public static class Builder {

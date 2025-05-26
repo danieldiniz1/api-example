@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "tb_address", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"street", "number", "city", "state", "country","zipCode"})
+        @UniqueConstraint(columnNames = {"street", "number","zipCode"})
 },
         indexes = {
                 @Index(name = "idx_general", columnList = "street, city, state"),
@@ -21,16 +21,22 @@ public class AddressModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false, length = 100)
     private String street;
 
+    @Column( length = 20)
     private String number;
 
+    @Column(nullable = false, length = 50)
     private String city;
 
+    @Column(nullable = false, length = 50)
     private String state;
 
+    @Column(nullable = false, length = 50)
     private String country;
 
+    @Column(name = "zip_code",nullable = false, length = 10)
     private String zipCode;
 
     public static class Builder {

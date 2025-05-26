@@ -10,22 +10,19 @@ import jakarta.validation.constraints.Email;
         @Index(name = "idx_name", columnList = "lastName, firstName"),
         @Index(name = "idx_cpf", columnList = "cpf", unique = true)
 })
-//TODO criar indexes para este e para addressModel
 public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 80)
-
+    @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
     @Column(unique = true, nullable = false)
-
     private String cpf;
 
     @Column(unique = true, nullable = false)
@@ -79,6 +76,7 @@ public class UserModel {
             this.contact = contact;
             return this;
         }
+
         public Builder active(boolean active) {
             this.active = active;
             return this;
@@ -97,7 +95,10 @@ public class UserModel {
             return userModel;
         }
     }
-    public long getId() {return id;}
+
+    public long getId() {
+        return id;
+    }
 
     public String getFirstName() {
         return firstName;
