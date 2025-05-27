@@ -3,6 +3,7 @@ package br.com.sh.apiexample.service.impl;
 import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
+import br.com.sh.apiexample.model.projection.UserProjectionDto;
 import br.com.sh.apiexample.repository.UserRepository;
 import br.com.sh.apiexample.service.UserService;
 import jakarta.transaction.Transactional;
@@ -29,7 +30,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public UserDto findBycpf(String cpf) {
+    public UserProjectionDto findBycpf(String cpf) {
         return userRepository
                 .findByCpfAndActive(cpf, true)
                 .orElseThrow(() -> new CustomEntityNotFoundException("User not found with cpf: " + cpf));
@@ -46,7 +47,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public List<UserDto> findallUsers() {
+    public List<UserProjectionDto> findallUsers() {
         return userRepository.findall();
     }
 }

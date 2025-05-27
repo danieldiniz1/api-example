@@ -1,20 +1,15 @@
-package br.com.sh.apiexample.model.dto;
+package br.com.sh.apiexample.model.projection;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.time.LocalDateTime;
-
 @JsonPropertyOrder({"firstName", "lastName", "email"})
-public record UserDto(
+public record UserProjectionDto(
         @JsonProperty("email")
         String email,
         @JsonProperty("nome")
         String firstName,
         @JsonProperty("sobrenome")
-        String lastName,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-        LocalDateTime dateResponse) {
+        String lastName) {
 
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DefaultUserFacade implements UserFacade {
@@ -34,7 +35,7 @@ public class DefaultUserFacade implements UserFacade {
 
     @Override
     public UserDto getUser(String cpf) {
-        return userService.findBycpf(cpf);
+        return userConverter.convertToDto(userService.findBycpf(cpf));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class DefaultUserFacade implements UserFacade {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userService.findallUsers();
+        return userService.findallUsers().stream().map(userConverter::convertToDto).collect(Collectors.toList());
     }
 
 }

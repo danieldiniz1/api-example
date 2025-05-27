@@ -2,6 +2,7 @@ package br.com.sh.apiexample.repository;
 
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
+import br.com.sh.apiexample.model.projection.UserProjectionDto;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,9 +17,9 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 
     @Query(value = "SELECT u.first_name, u.last_name, u.email FROM tb_user u WHERE u.active = true",
             nativeQuery = true)
-    List<UserDto> findall();
+    List<UserProjectionDto> findall();
 
-    Optional<UserDto> findByCpfAndActive(String cpf, boolean active);
+    Optional<UserProjectionDto> findByCpfAndActive(String cpf, boolean active);
 
     @Modifying
     @Transactional

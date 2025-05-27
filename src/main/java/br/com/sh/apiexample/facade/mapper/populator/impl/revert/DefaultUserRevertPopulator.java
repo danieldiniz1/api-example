@@ -5,6 +5,8 @@ import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.facade.mapper.populator.Populator;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class DefaultUserRevertPopulator implements Populator<UserModel, UserDto> {
     @Deprecated(since = "1.0", forRemoval = true)
@@ -15,6 +17,6 @@ public class DefaultUserRevertPopulator implements Populator<UserModel, UserDto>
 
     @Override
     public UserDto populate(UserModel userModel) {
-        return new UserDto(userModel.getFirstName(), userModel.getLastName(), userModel.getEmail());
+        return new UserDto(userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), LocalDateTime.now());
     }
 }

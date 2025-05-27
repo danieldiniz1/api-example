@@ -3,6 +3,7 @@ package br.com.sh.apiexample.service.impl;
 import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
+import br.com.sh.apiexample.model.projection.UserProjectionDto;
 import br.com.sh.apiexample.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ class DefaultUserServiceTest {
     private String email;
     private UserModel userModel;
     private UserDto userDto;
+    private UserProjectionDto userProjectionDto;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +49,7 @@ class DefaultUserServiceTest {
                 .email(email)
                 .build();
 
-        userDto = new UserDto(firstName, lastName, email);
+        userProjectionDto =  new UserProjectionDto(email, firstName, lastName);
     }
 
     @Test
@@ -67,12 +69,12 @@ class DefaultUserServiceTest {
 
     @Test
     void testFindByCpf_UserExists() {
-        when(userRepository.findByCpfAndActive(cpf, true)).thenReturn(Optional.of(userDto));
+        when(userRepository.findByCpfAndActive(cpf, true)).thenReturn(Optional.of(userProjectionDto));
 
-        UserDto result = defaultUserService.findBycpf(cpf);
+        UserProjectionDto result = defaultUserService.findBycpf(cpf);
 
         assertNotNull(result);
-        assertEquals(userDto, result);
+        assertEquals(userProjectionDto, result);
         verify(userRepository, times(1)).findByCpfAndActive(cpf, true);
     }
 
@@ -109,10 +111,10 @@ class DefaultUserServiceTest {
 
     @Test
     void testFindAllUsers() {
-        List<UserDto> users = List.of(new UserDto(email, firstName, lastName));
+        List<UserProjectionDto> users = List.of(userProjectionDto);
         when(userRepository.findall()).thenReturn(users);
 
-        List<UserDto> result = defaultUserService.findallUsers();
+        List<UserProjectionDto> result = defaultUserService.findallUsers();
 
         assertNotNull(result);
         assertEquals(users.size(), result.size());

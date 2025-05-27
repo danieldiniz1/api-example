@@ -3,6 +3,7 @@ package br.com.sh.apiexample.facade.mapper.converter;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.UserForm;
+import br.com.sh.apiexample.model.projection.UserProjectionDto;
 
 public interface UserConverter {
 
@@ -23,4 +24,13 @@ public interface UserConverter {
      * @return the converted UserDto
      */
     UserDto convertToDto(UserModel userModel);
+
+    /**
+     * Converts a UserProjectionDto to a UserDto.
+     * version 1.0
+     *
+     * @param bycpf the UserProjectionDto to convert
+     * @return the converted UserDto
+     */
+    UserDto convertToDto(UserProjectionDto bycpf);
 }
