@@ -6,6 +6,7 @@ import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.UserForm;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,14 +31,14 @@ public class UserController {
     }
 
     @Operation(
-        summary = "Create User",
-        description = "Creates a new user with the provided information.",
-        tags = {"User"},
-        responses = {
-            @ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
-        }
+            summary = "Create User",
+            description = "Creates a new user with the provided information.",
+            tags = {"User"},
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
+            }
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDto> create(@RequestBody UserForm userForm) {
@@ -49,13 +50,13 @@ public class UserController {
     @Operation(summary = "Get User by CPF", description = "Fetches a user by their CPF",
             tags = {"User"},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "ok",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = UserDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid CPF format",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    @ApiResponse(responseCode = "400", description = "Invalid CPF format", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ExceptionResponseDTO.class))),
-                    @ApiResponse(responseCode = "404", description = "User not found",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ExceptionResponseDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized request",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ExceptionResponseDTO.class))),
             })
     @GetMapping(path = "/{cpf}",
@@ -67,13 +68,13 @@ public class UserController {
     }
 
     @Operation(
-        summary = "Get All Users",
-        description = "Fetches all users in the system.",
-        tags = {"User"},
-        responses = {
-            @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserDto.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
-        }
+            summary = "Get All Users",
+            description = "Fetches all users in the system.",
+            tags = {"User"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
+            }
     )
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<UserDto>> getAllUsers() {
@@ -82,15 +83,15 @@ public class UserController {
     }
 
     @Operation(
-        summary = "Update User",
-        description = "Updates user information based on email and CPF.",
-        tags = {"User"},
-        responses = {
-            @ApiResponse(responseCode = "204", description = "User updated successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
-            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
-        }
+            summary = "Update User",
+            description = "Updates user information based on email and CPF.",
+            tags = {"User"},
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "User updated successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
+            }
     )
     @PatchMapping
     public ResponseEntity<UserDto> update(@RequestParam String email, @RequestParam String cpf) {
@@ -100,15 +101,15 @@ public class UserController {
     }
 
     @Operation(
-        summary = "Delete User",
-        description = "Deletes a user by CPF.",
-        tags = {"User"},
-        responses = {
-            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid CPF format", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
-            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
-        }
+            summary = "Delete User",
+            description = "Deletes a user by CPF.",
+            tags = {"User"},
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid CPF format", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
+            }
     )
     @DeleteMapping()
     public ResponseEntity<Void> delete(@RequestParam String cpf) {
