@@ -30,6 +30,7 @@ dependencies {
     implementation("org.flywaydb:flyway-mysql:11.8.2")
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.0")
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

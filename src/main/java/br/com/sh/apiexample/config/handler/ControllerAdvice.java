@@ -2,6 +2,7 @@ package br.com.sh.apiexample.config.handler;
 
 import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.model.dto.ExceptionResponseDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
+@Hidden
 @RestControllerAdvice
 public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
