@@ -24,7 +24,7 @@ public class UserController {
         this.userFacade = userFacade;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDto> create(@RequestBody UserForm userForm) {
         logger.info("Creating user with email: {}", userForm.email());
         UserDto userDto = userFacade.createUser(userForm);
@@ -32,14 +32,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/{cpf}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDto> getUser(@PathVariable String cpf) {
         logger.info("Fetching user with cpf: {}", cpf);
         UserDto userDto = userFacade.getUser(cpf);
         return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<UserDto>> getAllUsers() {
         logger.debug("Fetching all users");
         return ResponseEntity.status(HttpStatus.OK).body(userFacade.getAllUsers());
