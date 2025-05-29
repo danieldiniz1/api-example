@@ -3,6 +3,7 @@ package br.com.sh.apiexample.facade.mapper.populator.impl.revert;
 import br.com.sh.apiexample.facade.mapper.populator.Populator;
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.projection.UserProjectionDto;
+import br.com.sh.apiexample.util.CustomRandomUtil;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,9 @@ public class DefaultUserDtoPopulator implements Populator<UserProjectionDto, Use
         validations(userProjectionDto);
         return new UserDto(userProjectionDto.email(),
                 userProjectionDto.firstName(),
-                userProjectionDto.lastName(), LocalDateTime.now());
+                userProjectionDto.lastName(),
+                LocalDateTime.now(),
+                CustomRandomUtil.generateRandomString() ? "11 11188888818" : null);
     }
 
     private void validations(UserProjectionDto userProjectionDto) {
