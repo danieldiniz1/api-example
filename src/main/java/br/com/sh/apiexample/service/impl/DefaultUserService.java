@@ -36,11 +36,13 @@ public class DefaultUserService implements UserService {
                 .orElseThrow(() -> new CustomEntityNotFoundException("User not found with cpf: " + cpf));
     }
 
+    @Transactional
     @Override
     public void updateUser(String email, String cpf) {
         userRepository.updateUser(email,cpf);
     }
 
+    @Transactional
     @Override
     public void deleteUser(String cpf) {
         userRepository.logicDeleteByCpf(cpf);
