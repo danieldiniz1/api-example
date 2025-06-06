@@ -5,6 +5,8 @@ FROM openjdk:21
 # Set the working directory in the container
 WORKDIR /app
 
+ENV ACTIVE_PROFILE=dev
+
 # Copy the build files from the host to the container
 COPY build/libs/*.jar app.jar
 

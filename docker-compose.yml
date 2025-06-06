@@ -10,7 +10,7 @@ services:
     volumes:
         - db-data-sql:/var/lib/postgresql/data
     healthcheck:
-        test: [ "CMD", "pg_isready", "-U", "postgres" ]
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
         interval: 30s
         timeout: 10s
         retries: 5

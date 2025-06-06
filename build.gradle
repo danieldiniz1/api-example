@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'br.com.sh'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 
 java {
     toolchain {
@@ -20,6 +20,18 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    implementation("org.flywaydb:flyway-core:11.8.2")
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
+    implementation("org.flywaydb:flyway-mysql:11.8.2")
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.0")
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     runtimeOnly ('com.mysql:mysql-connector-j'){
