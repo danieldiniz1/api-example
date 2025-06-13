@@ -94,7 +94,7 @@ public class UserController {
             @RequestParam(defaultValue = "DESC") String sort
     ) {
         logger.debug("Fetching all users with pagination: page={}, pageSize={}, sort={}", page, pageSize, sort);
-        Page<UserDto> usersPage = userFacade.getAllUsers(PageRequest.of(page, pageSize, Sort.Direction.fromString(sort),"email"));
+        Page<UserDto> usersPage = userFacade.getAllUsers(PageRequest.of(page, pageSize, Sort.by(sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,"email", "firstName")));
         return ResponseEntity.status(HttpStatus.OK).body(usersPage);
     }
 //
