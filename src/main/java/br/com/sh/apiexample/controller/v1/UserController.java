@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600, allowCredentials = "true",methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
 @RequestMapping("/v1/user")
 public class UserController {
@@ -29,6 +30,7 @@ public class UserController {
     public UserController(UserFacade userFacade) {
         this.userFacade = userFacade;
     }
+
 
     @Operation(
             summary = "Create User",
@@ -41,6 +43,7 @@ public class UserController {
             }
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"}, maxAge = 3600, allowCredentials = "true", methods = {RequestMethod.POST})
     public ResponseEntity<UserDto> create(@RequestBody UserForm userForm) {
         logger.info("Creating user with email: {}", userForm.email());
         UserDto userDto = userFacade.createUser(userForm);
