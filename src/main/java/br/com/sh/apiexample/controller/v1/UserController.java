@@ -12,10 +12,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -72,7 +79,7 @@ public class UserController {
 
     @Operation(
             summary = "Get All Users",
-            description = "Fetches all users in the system.",
+            description = "Fetches all users in the system with pagination support. Use query params: page (default 0), pageSize (default 10), sort (ASC or DESC, default DESC).",
             tags = {"User"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))),
@@ -80,10 +87,39 @@ public class UserController {
             }
     )
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        logger.debug("Fetching all users");
-        return ResponseEntity.status(HttpStatus.OK).body(userFacade.getAllUsers());
+//    método que retorna apenas Page e tem mais detalhamento via interface, mas pode ter problema de serialização com versão do spring boot
+    public ResponseEntity<Page<UserDto>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10", name = "pageSize") int pageSize,
+            @RequestParam(defaultValue = "DESC") String sort
+    ) {
+        logger.debug("Fetching all users with pagination: page={}, pageSize={}, sort={}", page, pageSize, sort);
+        Page<UserDto> usersPage = userFacade.getAllUsers(PageRequest.of(page, pageSize, Sort.Direction.fromString(sort),"email"));
+        return ResponseEntity.status(HttpStatus.OK).body(usersPage);
     }
+//
+//    @Operation(
+//            summary = "Get All Users",
+//            description = "Fetches all users in the system with pagination support. Use query params: page (default 0), pageSize (default 10), sort (ASC or DESC, default DESC).",
+//            tags = {"User"},
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "ok", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))),
+//                    @ApiResponse(responseCode = "401", description = "Unauthorized request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class)))
+//            }
+//    )
+    //    método que retorna apenas PagedModel<EntityModel<UserDto>> e tem menos detalhamento via interface, mas evita ter problema de serialização com versão do spring boot por ser módulo do spring HATEOAS
+//    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+//    public ResponseEntity<PagedModel<EntityModel<UserDto>>> getAllUsers(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10", name = "pageSize") int pageSize,
+//            @RequestParam(defaultValue = "DESC") String sort,
+//            PagedResourcesAssembler<UserDto> pagedResourcesAssembler
+//    ) {
+//        logger.debug("Fetching all users with pagination: page={}, pageSize={}, sort={}", page, pageSize, sort);
+//        Page<UserDto> usersPage = userFacade.getAllUsers(PageRequest.of(page, pageSize, Sort.Direction.fromString(sort),"email"));
+//        PagedModel<EntityModel<UserDto>> model = pagedResourcesAssembler.toModel(usersPage);
+//        return ResponseEntity.status(HttpStatus.OK).body(model);
+//    }
 
     @Operation(
             summary = "Update User",

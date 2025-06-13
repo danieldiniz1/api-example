@@ -8,6 +8,8 @@ import br.com.sh.apiexample.model.form.UserForm;
 import br.com.sh.apiexample.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -49,8 +51,9 @@ public class DefaultUserFacade implements UserFacade {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userService.findallUsers().stream().map(userConverter::convertToDto).collect(Collectors.toList());
+    public Page<UserDto> getAllUsers(PageRequest pageRequest) {
+        return userService.findAllUsersPaginated(pageRequest).map(userConverter::convertToDto);
+//        return userService.findallUsers().stream().map(userConverter::convertToDto).collect(Collectors.toList());
     }
 
 }

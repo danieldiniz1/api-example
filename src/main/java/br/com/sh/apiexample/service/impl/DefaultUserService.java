@@ -9,6 +9,8 @@ import br.com.sh.apiexample.service.UserService;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +53,10 @@ public class DefaultUserService implements UserService {
     @Override
     public List<UserProjectionDto> findallUsers() {
         return userRepository.findall();
+    }
+
+    @Override
+    public Page<UserModel> findAllUsersPaginated(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest);
     }
 }
