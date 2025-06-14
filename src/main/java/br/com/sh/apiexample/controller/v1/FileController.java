@@ -1,5 +1,6 @@
 package br.com.sh.apiexample.controller.v1;
 
+import br.com.sh.apiexample.exception.InvalidFileResourceException;
 import br.com.sh.apiexample.facade.FileFacade;
 import br.com.sh.apiexample.model.dto.ExceptionResponseDTO;
 import br.com.sh.apiexample.model.dto.UploadFileResponseDTO;
@@ -10,14 +11,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/file")
@@ -68,7 +73,7 @@ public class FileController {
                     )
             }
     )
-    @PostMapping(value = "/upload", consumes = "multipart/form-data")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UploadFileResponseDTO> uploadFile(@RequestParam("file") MultipartFile file) {
 
         UploadFileResponseDTO response = fileFacade.uploadFile(file);
@@ -113,8 +118,8 @@ public class FileController {
                     )
             }
     )
-    @PostMapping(value = "/upload/all", consumes = "multipart/form-data")
-    public ResponseEntity<List<UploadFileResponseDTO>> uploadFiles(@RequestParam("file") MultipartFile[] files) {
+    @PostMapping(value = "/upload/all", consumes = "multipart/form-data", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<UploadFileResponseDTO>> uploadFiles(@RequestParam("files") MultipartFile[] files) {
         logger.info("Uploading all files");
         List<UploadFileResponseDTO> response = Arrays.stream(files)
                 .map(fileFacade::uploadFile)
@@ -165,9 +170,32 @@ public class FileController {
             }
     )
     @GetMapping("/download")
-    public ResponseEntity<?> downloadFile(@RequestParam String fileName, HttpServletRequest request) {
-        // TODO: Implementar download de arquivo
-        return ResponseEntity.ok(null);
+    public ResponseEntity<Resource> downloadFile(@RequestParam String fileName, HttpServletRequest request) {
+        validateFileName(fileName);
+        Resource resource = fileFacade.downloadFile(fileName, request);
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            logger.error("Could not determine file type for: {}", fileName, e);
+        }
+
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+            logger.warn("Could not determine content type for file: {}, defaulting to application/octet-stream", fileName);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + contentType + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    private void validateFileName(String fileName) {
+        if (Objects.isNull(fileName) || fileName.isEmpty()) {
+            logger.error("File name is empty or null");
+            throw new InvalidFileResourceException("File name cannot be empty or null");
+        }
     }
 
 }
