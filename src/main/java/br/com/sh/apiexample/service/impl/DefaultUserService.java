@@ -3,6 +3,7 @@ package br.com.sh.apiexample.service.impl;
 import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
+import br.com.sh.apiexample.model.form.UserForm;
 import br.com.sh.apiexample.model.projection.UserProjectionDto;
 import br.com.sh.apiexample.repository.UserRepository;
 import br.com.sh.apiexample.service.UserService;
@@ -58,5 +59,10 @@ public class DefaultUserService implements UserService {
     @Override
     public Page<UserModel> findAllUsersPaginated(PageRequest pageRequest) {
         return userRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public List<UserModel> saveAllUsers(List<UserModel> userModels) {
+        return userRepository.saveAll(userModels);
     }
 }

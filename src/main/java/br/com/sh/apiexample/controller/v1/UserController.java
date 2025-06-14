@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 //@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600, allowCredentials = "true",methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
@@ -148,6 +151,15 @@ public class UserController {
         logger.info("Deleting user with email: {}", cpf);
         userFacade.deleteUser(cpf);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping(value = "/batch",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<UserDto>> createUserInBatch(@RequestParam("file") MultipartFile file){
+        logger.info("Creating users in batch from file: {}", file.getOriginalFilename());
+        List<UserDto> userDtos = userFacade.createUsersInBatch(file);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDtos);
     }
 
 }
