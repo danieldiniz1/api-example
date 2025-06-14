@@ -153,6 +153,38 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Operation(
+            summary = "Create Users in Batch",
+            description = "Cria múltiplos usuários a partir de um arquivo enviado (importação em lote).",
+            tags = {"User"},
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Usuários criados com sucesso",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Arquivo inválido ou erro de validação",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Requisição não autenticada",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Requisição não autorizada",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Erro interno ao processar o arquivo",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    )
+            }
+    )
     @PostMapping(value = "/batch",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
