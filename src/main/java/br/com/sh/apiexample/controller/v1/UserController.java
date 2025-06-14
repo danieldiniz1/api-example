@@ -4,7 +4,6 @@ import br.com.sh.apiexample.facade.UserFacade;
 import br.com.sh.apiexample.model.dto.ExceptionResponseDTO;
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.UserForm;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,19 +11,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
 
 //@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600, allowCredentials = "true",methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
@@ -94,7 +87,7 @@ public class UserController {
             @RequestParam(defaultValue = "DESC") String sort
     ) {
         logger.debug("Fetching all users with pagination: page={}, pageSize={}, sort={}", page, pageSize, sort);
-        Page<UserDto> usersPage = userFacade.getAllUsers(PageRequest.of(page, pageSize, Sort.by(sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,"email", "firstName")));
+        Page<UserDto> usersPage = userFacade.getAllUsers(PageRequest.of(page, pageSize, Sort.by(sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, "email", "firstName")));
         return ResponseEntity.status(HttpStatus.OK).body(usersPage);
     }
 //
