@@ -21,7 +21,7 @@ public class FileImporterFactory {
         this.applicationContext = applicationContext;
     }
 
-    public FileImporter getFileImporter(String fileName) throws  Exception {
+    public FileImporter getFileImporter(String fileName){
         validateName(fileName);
         if (fileName.endsWith(".xlsx")) return applicationContext.getBean(XlsxImporter.class);
         if (fileName.endsWith(".csv")) return applicationContext.getBean(CsvImporter.class);

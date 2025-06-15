@@ -3,6 +3,8 @@ package br.com.sh.apiexample.facade.impl;
 import br.com.sh.apiexample.exception.InvalidFileResourceException;
 import br.com.sh.apiexample.facade.UserFacade;
 import br.com.sh.apiexample.facade.mapper.converter.UserConverter;
+import br.com.sh.apiexample.file.exporter.FileExporter;
+import br.com.sh.apiexample.file.exporter.factory.FileExporterFactory;
 import br.com.sh.apiexample.file.importer.FileImporter;
 import br.com.sh.apiexample.file.importer.factory.FileImporterFactory;
 import br.com.sh.apiexample.model.UserModel;
@@ -11,6 +13,7 @@ import br.com.sh.apiexample.model.form.UserForm;
 import br.com.sh.apiexample.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -29,12 +32,14 @@ public class DefaultUserFacade implements UserFacade {
     private final UserService userService;
 
     private final FileImporterFactory fileImporterFactory;
+    private final FileExporterFactory fileExporterFactory;
 
     private final UserConverter userConverter;
 
-    public DefaultUserFacade(UserService userService, FileImporterFactory fileImporterFactory, UserConverter userConverter) {
+    public DefaultUserFacade(UserService userService, FileImporterFactory fileImporterFactory, FileExporterFactory fileExporterFactory, UserConverter userConverter) {
         this.userService = userService;
         this.fileImporterFactory = fileImporterFactory;
+        this.fileExporterFactory = fileExporterFactory;
         this.userConverter = userConverter;
     }
 
@@ -73,9 +78,9 @@ public class DefaultUserFacade implements UserFacade {
         }
 
         List<UserForm> userForms;
+        String originalFilename = Optional.ofNullable(file.getOriginalFilename()).orElseThrow(() -> new InvalidFileResourceException("File name cannot be null or empty"));
+        FileImporter fileImporter = fileImporterFactory.getFileImporter(originalFilename);
         try (InputStream inputStream = file.getInputStream()) {
-            String originalFilename = Optional.ofNullable(file.getOriginalFilename()).orElseThrow(() -> new InvalidFileResourceException("File name cannot be null or empty"));
-            FileImporter fileImporter = fileImporterFactory.getFileImporter(originalFilename);
             userForms = fileImporter.importFileInputStreamToUserFormList(originalFilename, file.getContentType(),inputStream);
         } catch (IOException e) {
             throw new InvalidFileResourceException("Cannot read file: " + file.getName(), e);
@@ -91,6 +96,18 @@ public class DefaultUserFacade implements UserFacade {
                 .stream()
                 .map(userConverter::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Resource downloadFileData(String contentType, PageRequest pageRequest) {
+        FileExporter fileExporter = fileExporterFactory.getFileExporter(contentType);
+        List<UserModel> userListFilter = userService.findAllUsersPaginated(pageRequest).getContent();
+        try {
+            return fileExporter.export(userListFilter);
+        }catch (IOException e) {
+            logger.error("Error exporting file data: {}", e.getMessage());
+            throw new InvalidFileResourceException("Error exporting file data", e);
+        }
     }
 
 }

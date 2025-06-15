@@ -57,8 +57,16 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidFileResourceException.class)
-    public final ResponseEntity<Object> handleInvalidFileResourceException(InvalidFileResourceException ex, WebRequest request) {
+    public final ResponseEntity<ExceptionResponseDTO> handleInvalidFileResourceException(InvalidFileResourceException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponseDTO(LocalDateTime.now(),
+                        ex.getMessage(),
+                        request.getDescription(false)));
+    }
+
+    @ExceptionHandler(WriterFileException.class)
+    public final ResponseEntity<Object> handleWriterFileException(WriterFileException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionResponseDTO(LocalDateTime.now(),
                         ex.getMessage(),
                         request.getDescription(false)));

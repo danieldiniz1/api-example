@@ -11,9 +11,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -193,5 +195,22 @@ public class UserController {
         List<UserDto> userDtos = userFacade.createUsersInBatch(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDtos);
     }
+
+    @GetMapping(path = "/download-data",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<Resource> downloadFileData(@RequestParam(required = true,name = "contentType") String contentType,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "10", name = "pageSize") int pageSize,
+                                                     @RequestParam(defaultValue = "DESC") String sort) {
+        logger.info("Downloading file with content type: {}", contentType);
+        Resource resource = userFacade.downloadFileData(contentType,PageRequest
+                .of(page, pageSize, Sort.by(sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, "email", "firstName")));
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .header("Content-Disposition", "attachment; filename=\"users." + contentType + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+    }
+
 
 }
