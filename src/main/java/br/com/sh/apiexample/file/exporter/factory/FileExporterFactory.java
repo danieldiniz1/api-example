@@ -4,6 +4,7 @@ import br.com.sh.apiexample.exception.InvalidFileResourceException;
 import br.com.sh.apiexample.file.exporter.FileExporter;
 import br.com.sh.apiexample.file.exporter.impl.CsvExporter;
 import br.com.sh.apiexample.file.exporter.impl.XlsxExporter;
+import br.com.sh.apiexample.util.constants.MediaTypeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 @Component
 public class FileExporterFactory {
+
     @Value("${file.accepted.xlsx}")
     private String XLSX_CONTENT_TYPE;
 
@@ -30,8 +32,8 @@ public class FileExporterFactory {
 
     public FileExporter getFileExporter(String fileName) {
         validateName(fileName);
-        if (fileName.equalsIgnoreCase(XLSX_CONTENT_TYPE)) return applicationContext.getBean(XlsxExporter.class);
-        if (fileName.equalsIgnoreCase(CSV_CONTENT_TYPE)) return applicationContext.getBean(CsvExporter.class);
+        if (fileName.equalsIgnoreCase(MediaTypeConstants.APPLICATION_XLSX)) return applicationContext.getBean(XlsxExporter.class);
+        if (fileName.equalsIgnoreCase(MediaTypeConstants.TEXT_CSV)) return applicationContext.getBean(CsvExporter.class);
         throw new InvalidFileResourceException("Invalid file format:");
     }
 

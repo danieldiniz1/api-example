@@ -4,11 +4,13 @@ import br.com.sh.apiexample.facade.UserFacade;
 import br.com.sh.apiexample.model.dto.ExceptionResponseDTO;
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.UserForm;
+import br.com.sh.apiexample.util.constants.MediaTypeConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -190,26 +192,87 @@ public class UserController {
     @PostMapping(value = "/batch",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<UserDto>> createUserInBatch(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<List<UserDto>> createUserInBatch(@RequestParam("file") MultipartFile file) {
         logger.info("Creating users in batch from file: {}", file.getOriginalFilename());
         List<UserDto> userDtos = userFacade.createUsersInBatch(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDtos);
     }
 
+    @Operation(
+            summary = "Download de dados de usuários",
+            description = "Realiza o download dos dados de usuários em diversos formatos (JSON, XML, CSV, XLSX, PDF, binário). O formato é definido pelo header Accept.",
+            tags = {"User"},
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Arquivo gerado com sucesso",
+                            content = {
+                                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
+                                    @Content(mediaType = MediaType.APPLICATION_XML_VALUE),
+                                    @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE),
+                                    @Content(mediaType = MediaTypeConstants.APPLICATION_XLSX),
+                                    @Content(mediaType = MediaTypeConstants.TEXT_CSV),
+                                    @Content(mediaType = MediaTypeConstants.APPLICATION_PDF)
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Parâmetros inválidos ou formato não suportado",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Requisição não autenticada",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Requisição não autorizada",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Erro interno ao gerar o arquivo",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponseDTO.class))
+                    )
+            }
+    )
     @GetMapping(path = "/download-data",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<Resource> downloadFileData(@RequestParam(required = true,name = "contentType") String contentType,
-                                                     @RequestParam(defaultValue = "0") int page,
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                    MediaTypeConstants.APPLICATION_XLSX,
+                    MediaTypeConstants.TEXT_CSV,
+                    MediaTypeConstants.APPLICATION_PDF,
+                    MediaTypeConstants.APPLICATION_XLSX})
+    public ResponseEntity<Resource> downloadFileData(@RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "10", name = "pageSize") int pageSize,
-                                                     @RequestParam(defaultValue = "DESC") String sort) {
-        logger.info("Downloading file with content type: {}", contentType);
-        Resource resource = userFacade.downloadFileData(contentType,PageRequest
+                                                     @RequestParam(defaultValue = "DESC") String sort,
+                                                     HttpServletRequest request) {
+
+        String acceptContentType = request.getHeader(HttpHeaders.ACCEPT);
+        logger.info("Downloading file with content type: {}", acceptContentType);
+
+        Resource resource = userFacade.downloadFileData(acceptContentType, PageRequest
                 .of(page, pageSize, Sort.by(sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, "email", "firstName")));
+
+        var fileExtension = getFileExtension(acceptContentType);
+
+
         return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_TYPE, contentType)
-                .header("Content-Disposition", "attachment; filename=\"users." + contentType + "\"")
-                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_TYPE, acceptContentType != null ? acceptContentType : MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"users" + fileExtension + "\"")
+                .contentType(MediaType.parseMediaType(acceptContentType))
                 .body(resource);
+    }
+
+    private static String getFileExtension(String contentType) {
+        return contentType.equalsIgnoreCase(MediaTypeConstants.APPLICATION_XLSX) ? ".xlsx" :
+                contentType.equalsIgnoreCase(MediaTypeConstants.TEXT_CSV) ? ".csv" :
+                        contentType.equalsIgnoreCase(MediaTypeConstants.APPLICATION_XML) ? ".xml" :
+                                contentType.equalsIgnoreCase(MediaTypeConstants.APPLICATION_JSON) ? ".json" :
+                                        contentType.equalsIgnoreCase(MediaTypeConstants.APPLICATION_PDF) ? ".pdf" :
+                                                ".dat"; // Default extension for unknown types
     }
 
 
