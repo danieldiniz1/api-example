@@ -62,6 +62,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional
     public List<UserModel> saveAllUsers(List<UserModel> userModels) {
         return userRepository.saveAll(userModels);
     }

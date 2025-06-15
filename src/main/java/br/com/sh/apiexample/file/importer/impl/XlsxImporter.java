@@ -52,15 +52,15 @@ public class XlsxImporter implements FileImporter {
         String firstName = row.getCell(0).getStringCellValue();
         String lastName = row.getCell(1).getStringCellValue();
         String email = row.getCell(2).getStringCellValue();
-        String cpf = row.getCell(3).getStringCellValue();
+        String cpf = row.getCell(3).getNumericCellValue() == 0 ? null : String.valueOf((long) row.getCell(3).getNumericCellValue());
 
         AddressForm addressForm = new AddressForm(
                 row.getCell(4).getStringCellValue(),
-                row.getCell(5).getStringCellValue(),
+                row.getCell(5).getNumericCellValue() == 0 ? null : String.valueOf(row.getCell(5).getNumericCellValue()),
                 row.getCell(6).getStringCellValue(),
                 row.getCell(7).getStringCellValue(),
                 row.getCell(8).getStringCellValue(),
-                row.getCell(9).getStringCellValue()
+                row.getCell(9).getNumericCellValue() == 0 ? null : String.valueOf((long) row.getCell(9).getNumericCellValue())
         );
 
         ContactForm contactForm = new ContactForm(
