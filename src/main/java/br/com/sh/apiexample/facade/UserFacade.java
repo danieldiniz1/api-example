@@ -2,6 +2,10 @@ package br.com.sh.apiexample.facade;
 
 import br.com.sh.apiexample.model.dto.UserDto;
 import br.com.sh.apiexample.model.form.UserForm;
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,5 +19,9 @@ public interface UserFacade {
 
     void deleteUser(String email);
 
-    List<UserDto> getAllUsers();
+    Page<UserDto> getAllUsers(PageRequest pageRequest);
+
+    List<UserDto> createUsersInBatch(MultipartFile file);
+
+    Resource downloadFileData(String contentType, PageRequest pageRequest);
 }

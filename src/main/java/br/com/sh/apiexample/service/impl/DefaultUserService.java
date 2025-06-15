@@ -3,12 +3,15 @@ package br.com.sh.apiexample.service.impl;
 import br.com.sh.apiexample.exception.CustomEntityNotFoundException;
 import br.com.sh.apiexample.model.UserModel;
 import br.com.sh.apiexample.model.dto.UserDto;
+import br.com.sh.apiexample.model.form.UserForm;
 import br.com.sh.apiexample.model.projection.UserProjectionDto;
 import br.com.sh.apiexample.repository.UserRepository;
 import br.com.sh.apiexample.service.UserService;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +54,16 @@ public class DefaultUserService implements UserService {
     @Override
     public List<UserProjectionDto> findallUsers() {
         return userRepository.findall();
+    }
+
+    @Override
+    public Page<UserModel> findAllUsersPaginated(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest);
+    }
+
+    @Override
+    @Transactional
+    public List<UserModel> saveAllUsers(List<UserModel> userModels) {
+        return userRepository.saveAll(userModels);
     }
 }
