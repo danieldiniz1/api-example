@@ -84,9 +84,8 @@ public class DefaultUserFacade implements UserFacade {
             userForms = fileImporter.importFileInputStreamToUserFormList(originalFilename, file.getContentType(),inputStream);
         } catch (IOException e) {
             throw new InvalidFileResourceException("Cannot read file: " + file.getName(), e);
-        } catch (Exception e) {
-            throw new InvalidFileResourceException("Cannot get file importer for file: " + file.getName(), e);
         }
+
 
         return userService.saveAllUsers(
                         userForms

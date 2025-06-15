@@ -1,5 +1,6 @@
 package br.com.sh.apiexample.file.importer.impl;
 
+import br.com.sh.apiexample.exception.InvalidFileResourceException;
 import br.com.sh.apiexample.file.importer.FileImporter;
 import br.com.sh.apiexample.model.form.AddressForm;
 import br.com.sh.apiexample.model.form.ContactForm;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +25,7 @@ public class XlsxImporter implements FileImporter {
     private static final Logger LOGGER = LoggerFactory.getLogger(XlsxImporter.class);
 
     @Override
-    public List<UserForm> importFileInputStreamToUserFormList(String fileName, String contentType, InputStream fileInputStream) throws Exception {
+    public List<UserForm> importFileInputStreamToUserFormList(String fileName, String contentType, InputStream fileInputStream)  {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream)) {
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -32,6 +34,12 @@ public class XlsxImporter implements FileImporter {
             if (rowIterator.hasNext()) rowIterator.next();
             return parseRowsToUserForms(rowIterator);
 
+        } catch (IllegalStateException e) {
+            LOGGER.error("Cannot read line in file: {}", fileName, e);
+            throw new InvalidFileResourceException("Error processing XLSX file: " + e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.error("Cannot read file: {}", fileName, e);
+            throw new InvalidFileResourceException("Error reading XLSX file: " + e.getMessage(), e);
         }
     }
 

@@ -1,5 +1,6 @@
 package br.com.sh.apiexample.file.importer.impl;
 
+import br.com.sh.apiexample.exception.InvalidFileResourceException;
 import br.com.sh.apiexample.file.importer.FileImporter;
 import br.com.sh.apiexample.model.form.AddressForm;
 import br.com.sh.apiexample.model.form.ContactForm;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class CsvImporter implements FileImporter {
     private static final Logger LOGGER = LoggerFactory.getLogger(CsvImporter.class);
 
     @Override
-    public List<UserForm> importFileInputStreamToUserFormList(String fileName, String contentType, InputStream fileInputStream) throws Exception {
+    public List<UserForm> importFileInputStreamToUserFormList(String fileName, String contentType, InputStream fileInputStream)  {
         CSVFormat format = CSVFormat.Builder.create()
                 .setHeader()
                 .setSkipHeaderRecord(true)
@@ -30,9 +32,12 @@ public class CsvImporter implements FileImporter {
                 .setDelimiter(',')
                 .get();
 
-        Iterable<CSVRecord> records = format.parse(new InputStreamReader(fileInputStream));
+        try {
+            return parseRecordsToUserForms(format.parse(new InputStreamReader(fileInputStream)));
+        } catch (IOException e) {
+            throw new InvalidFileResourceException("Error reading CSV file: " + e.getMessage(), e);
+        }
 
-        return parseRecordsToUserForms(records);
     }
 
     private List<UserForm> parseRecordsToUserForms(Iterable<CSVRecord> records) {
