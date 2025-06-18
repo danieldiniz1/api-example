@@ -37,6 +37,12 @@ dependencies {
     implementation("org.apache.commons:commons-csv:1.14.0")
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation("org.apache.poi:poi-ooxml:5.4.1")
+    // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports
+    implementation("net.sf.jasperreports:jasperreports:7.0.3")
+    // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts
+    implementation("net.sf.jasperreports:jasperreports-fonts:7.0.3")
+    // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-pdf
+    implementation("net.sf.jasperreports:jasperreports-pdf:7.0.3")
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

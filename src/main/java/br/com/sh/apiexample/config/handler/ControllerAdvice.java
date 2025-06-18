@@ -71,4 +71,12 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
                         ex.getMessage(),
                         request.getDescription(false)));
     }
+
+    @ExceptionHandler(PdfTemplateNotFoundException.class)
+    public final ResponseEntity<Object> handlePdfTemplateNotFoundException(PdfTemplateNotFoundException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponseDTO(LocalDateTime.now(),
+                        ex.getMessage(),
+                        request.getDescription(false)));
+    }
 }

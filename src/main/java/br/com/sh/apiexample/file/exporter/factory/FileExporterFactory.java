@@ -3,6 +3,7 @@ package br.com.sh.apiexample.file.exporter.factory;
 import br.com.sh.apiexample.exception.InvalidFileResourceException;
 import br.com.sh.apiexample.file.exporter.FileExporter;
 import br.com.sh.apiexample.file.exporter.impl.CsvExporter;
+import br.com.sh.apiexample.file.exporter.impl.PdfExporter;
 import br.com.sh.apiexample.file.exporter.impl.XlsxExporter;
 import br.com.sh.apiexample.util.constants.MediaTypeConstants;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class FileExporterFactory {
         validateName(fileName);
         if (fileName.equalsIgnoreCase(MediaTypeConstants.APPLICATION_XLSX)) return applicationContext.getBean(XlsxExporter.class);
         if (fileName.equalsIgnoreCase(MediaTypeConstants.TEXT_CSV)) return applicationContext.getBean(CsvExporter.class);
+        if (fileName.equalsIgnoreCase(MediaTypeConstants.APPLICATION_PDF)) return applicationContext.getBean(PdfExporter.class);
         throw new InvalidFileResourceException("Invalid file format:");
     }
 
