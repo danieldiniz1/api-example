@@ -1,44 +1,64 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
 <jasperReport name="Blank_A4" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0973a772-26b1-411d-b56f-c840c5d2a58b">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+    <style name="zebra style">
+        <conditionalStyle mode="Opaque" forecolor="#707070" backcolor="#E3BFBF">
+            <conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+        </conditionalStyle>
+        <conditionalStyle mode="Opaque" forecolor="#FFC8C7" backcolor="#C2C2C2">
+            <conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></conditionExpression>
+        </conditionalStyle>
+    </style>
     <query language="csv"><![CDATA[]]></query>
     <field name="firstName" class="java.lang.String"/>
     <field name="email" class="java.lang.String"/>
     <field name="cpf" class="java.lang.String"/>
     <background splitType="Stretch"/>
-    <title height="79" splitType="Stretch"/>
-    <pageHeader height="35" splitType="Stretch"/>
+    <title height="122" splitType="Stretch">
+        <element kind="staticText" uuid="b1c1fe9b-7e55-4e7c-940a-8e55834cd727" x="0" y="10" width="550" height="110" fontSize="53.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Exemplo de Report]]></text>
+        </element>
+    </title>
+    <pageHeader height="48" splitType="Stretch">
+        <element kind="staticText" uuid="dfb1b8e2-9ff7-42ad-ab9d-ce927c041382" x="230" y="9" width="100" height="30" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Exemplo menor]]></text>
+        </element>
+    </pageHeader>
     <columnHeader height="61" splitType="Stretch">
-        <element kind="staticText" uuid="dac67128-c822-4988-8baa-b84ccdee7271" x="0" y="0" width="130" height="30" fontName="DejaVu Sans" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+        <element kind="staticText" uuid="dac67128-c822-4988-8baa-b84ccdee7271" mode="Opaque" x="0" y="0" width="130" height="30" backcolor="#E3C4C3" fontName="DejaVu Sans" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[Nome]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f9ecf40-6019-4fc1-a2cd-91cc9abe8c53"/>
         </element>
-        <element kind="staticText" uuid="07e6c8b8-0bae-4749-a0dd-34f033bf6bc7" x="130" y="0" width="314" height="30" fontName="DejaVu Sans" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+        <element kind="staticText" uuid="07e6c8b8-0bae-4749-a0dd-34f033bf6bc7" mode="Opaque" x="130" y="0" width="314" height="30" backcolor="#E3C4C3" fontName="DejaVu Sans" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[E-mail]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8ff9edb-b21f-45c1-b14d-9c33fa9a5c09"/>
         </element>
-        <element kind="staticText" uuid="0f866d68-bebe-479d-8603-d96422602f16" x="445" y="0" width="100" height="30" fontName="DejaVu Sans" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+        <element kind="staticText" uuid="0f866d68-bebe-479d-8603-d96422602f16" mode="Opaque" x="445" y="0" width="100" height="30" backcolor="#E3C4C3" fontName="DejaVu Sans" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[Documento (CPF)]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b750458-b1db-47e9-976f-61f5345be76a"/>
         </element>
     </columnHeader>
     <detail>
-        <band height="125" splitType="Stretch">
-            <element kind="textField" uuid="36332b5e-c3a8-42b9-b5f2-63683761eb38" x="0" y="0" width="130" height="30">
+        <band height="20" splitType="Stretch">
+            <element kind="textField" uuid="36332b5e-c3a8-42b9-b5f2-63683761eb38" x="0" y="0" width="130" height="20" style="zebra style">
                 <expression><![CDATA[$F{firstName}]]></expression>
                 <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f9ecf40-6019-4fc1-a2cd-91cc9abe8c53"/>
             </element>
-            <element kind="textField" uuid="185c8a90-b237-4dd5-8831-35d72ce7003b" x="130" y="0" width="314" height="30">
+            <element kind="textField" uuid="185c8a90-b237-4dd5-8831-35d72ce7003b" x="130" y="0" width="314" height="20" style="zebra style">
                 <expression><![CDATA[$F{email}]]></expression>
                 <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a8ff9edb-b21f-45c1-b14d-9c33fa9a5c09"/>
             </element>
-            <element kind="textField" uuid="d0e482fd-0eb1-45a6-a147-af30e3d5451b" x="445" y="0" width="100" height="30">
+            <element kind="textField" uuid="d0e482fd-0eb1-45a6-a147-af30e3d5451b" x="445" y="0" width="100" height="20" style="zebra style">
                 <expression><![CDATA[$F{cpf}]]></expression>
                 <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b750458-b1db-47e9-976f-61f5345be76a"/>
             </element>
         </band>
     </detail>
-    <columnFooter height="45" splitType="Stretch"/>
+    <columnFooter height="49" splitType="Stretch">
+        <element kind="staticText" uuid="6d52b286-efd2-4c3e-9ed8-55454549f963" x="0" y="0" width="550" height="30" hTextAlign="Center" vTextAlign="Bottom">
+            <text><![CDATA[copyright - ]]></text>
+        </element>
+    </columnFooter>
     <pageFooter height="80" splitType="Stretch">
         <element kind="textField" uuid="b35bce0b-f53e-4240-862a-20658492c1cd" x="10" y="40" width="100" height="30" pattern="MMMMM dd, yyyy">
             <expression><![CDATA[new java.text.SimpleDateFormat("d MMM yyyy", java.util.Locale.ENGLISH).format(new java.util.Date())
