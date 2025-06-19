@@ -9,6 +9,7 @@
             <conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 1]]></conditionExpression>
         </conditionalStyle>
     </style>
+    <parameter name="QR_CODEIMAGE" class="java.io.InputStream"/>
     <query language="csv"><![CDATA[]]></query>
     <field name="firstName" class="java.lang.String"/>
     <field name="email" class="java.lang.String"/>
@@ -55,7 +56,7 @@
         </band>
     </detail>
     <columnFooter height="49" splitType="Stretch">
-        <element kind="staticText" uuid="6d52b286-efd2-4c3e-9ed8-55454549f963" x="0" y="0" width="550" height="30" hTextAlign="Center" vTextAlign="Bottom">
+        <element kind="staticText" uuid="6d52b286-efd2-4c3e-9ed8-55454549f963" x="0" y="19" width="550" height="30" hTextAlign="Center" vTextAlign="Bottom">
             <text><![CDATA[copyright - ]]></text>
         </element>
     </columnFooter>
@@ -70,6 +71,9 @@
         <element kind="textField" uuid="fb8a8b28-ab61-4877-a2f7-a1a7a164fb55" x="479" y="40" width="90" height="30" evaluationTime="Report" hTextAlign="Left">
             <expression><![CDATA[" of " + $V{PAGE_NUMBER}]]></expression>
         </element>
+        <element kind="image" uuid="a28f6b83-4827-4208-a771-664b94fb1e00" x="220" y="10" width="110" height="62">
+            <expression><![CDATA[$P{QR_CODEIMAGE}]]></expression>
+        </element>
     </pageFooter>
-    <summary height="42" splitType="Stretch"/>
+    <summary height="62" splitType="Stretch"/>
 </jasperReport>

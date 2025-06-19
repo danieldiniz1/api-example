@@ -3,6 +3,7 @@ package br.com.sh.apiexample.file.exporter.impl;
 import br.com.sh.apiexample.exception.PdfTemplateNotFoundException;
 import br.com.sh.apiexample.file.exporter.FileExporter;
 import br.com.sh.apiexample.model.UserModel;
+import br.com.sh.apiexample.service.QRCodeGeneratorService;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.slf4j.Logger;
@@ -25,6 +26,12 @@ public class PdfExporter implements FileExporter {
     private static final Logger LOGGER = LoggerFactory.getLogger(PdfExporter.class);
     private static final String PDF_RESOURCE = "/templates/RelatorioPessoaTemplate.jrxml";
     private static final String PDF_RESOURCE_NEW = "/templates/person.jrxml";
+
+    private final QRCodeGeneratorService qrCodeGeneratorService;
+
+    public PdfExporter(QRCodeGeneratorService qrCodeGeneratorService) {
+        this.qrCodeGeneratorService = qrCodeGeneratorService;
+    }
 
     @Override
     public Resource export(List<UserModel> userList) {
@@ -58,6 +65,13 @@ public class PdfExporter implements FileExporter {
                 "createdBy", "API Example"
         ));
         parameters.put("reportTitle", "User Report");
+        InputStream inputStream = null;
+        try {
+            inputStream = qrCodeGeneratorService.generateQRCode("https://www.google.com", 200, 200);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        parameters.put("QR_CODEIMAGE", inputStream);
         return parameters;
     }
 }

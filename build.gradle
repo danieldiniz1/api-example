@@ -43,6 +43,10 @@ dependencies {
     implementation("net.sf.jasperreports:jasperreports-fonts:7.0.3")
     // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-pdf
     implementation("net.sf.jasperreports:jasperreports-pdf:7.0.3")
+    // https://mvnrepository.com/artifact/com.google.zxing/core
+    implementation("com.google.zxing:core:3.5.3")
+    // https://mvnrepository.com/artifact/com.google.zxing/javase
+    implementation("com.google.zxing:javase:3.5.3")
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
